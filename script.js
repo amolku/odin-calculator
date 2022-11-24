@@ -132,4 +132,29 @@ function clickBackspace(e) {
     //}
 }
 
+// keyboard support
 
+document.addEventListener('keydown', (e) => {
+    const key = e.key;
+    console.log(key);
+    switch (key) {
+        case "1": case "2": case "3": case "4": case "5": case "6": case "7": case "8": case "9": case "0":
+            document.querySelector(`#digit-${key}`).click();
+            break;
+        case ".":
+            document.querySelector('#decimal').click();
+            break;
+        case "+": case "-": case "x": case "/":
+            document.querySelector(`[data-opType='${key}']`).click();
+            break;
+        case "Enter":
+            equals.click();
+            break;
+        case "Backspace":
+            backspace.click();
+            break;
+        case "p":
+            plusminus.click();
+            break;
+    }
+})

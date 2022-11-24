@@ -11,7 +11,9 @@ const equals = document.querySelector("#equals");
 let boolDecimalExists = false;
 let pendingBinaryOperation = null;
 let firstOperand = null;
-let userClickedOperation = false;
+//let userClickedOperation = false;
+let userClickedDigit = false;
+
 // event listeners
 
 digits.forEach(digit => digit.addEventListener('click', clickDigit));
@@ -19,7 +21,6 @@ decimal.addEventListener('click', clickDecimal);
 operators.forEach(operator => operator.addEventListener('click', clickOperator));
 clear.addEventListener('click', clickAllClear);
 equals.addEventListener('click', clickEquals)
-
 
 // helper functions
 
@@ -51,38 +52,44 @@ function resetState() {
     boolDecimalExists = false;
     pendingBinaryOperation = false;
     firstOperand = null;
-    userClickedOperation = false;
+    userClickedDigit = false;
 }
 
 // event handlers
 
 function clickDigit(e) {
-    if (userClickedOperation) {
+    if (!userClickedDigit) {
         display.innerText = this.innerText;
-        userClickedOperation = false;
     } else {
         if (display.innerText === "0") {
             display.innerText = "";    
         }
         display.innerText = `${display.innerText}${this.innerText}`;
     }
+    userClickedDigit = true;
 }
 
 function clickDecimal(e) {
-    if (userClickedOperation) {
+    if (!userClickedDigit) {
         display.innerText = "0."
-        userClickedOperation = false;
     } else {
         if (!boolDecimalExists) {
             display.innerText = `${display.innerText}${this.innerText}`;
         }
     }
     boolDecimalExists = true;
+    userClickedDigit = true;
 }
 
 function clickOperator(e) {
-    userClickedOperation = true;
-    boolDecimalExists = false;
+    if (!userClickedDigit) {
+        console.log("hoisies");
+        firstOperand = Number(display.innerText);
+        pendingBinaryOperation = this.innerText;
+        userClickedDigit = false;
+        boolDecimalExists = false;
+        return;
+    }
     if(pendingBinaryOperation) {
         firstOperand = evaluate();
         pendingBinaryOperation = this.innerText;
@@ -90,6 +97,8 @@ function clickOperator(e) {
         firstOperand = Number(display.innerText);
         pendingBinaryOperation = this.innerText;
     }
+    userClickedDigit = false;
+    boolDecimalExists = false;
 }   
 
 function clickAllClear(e) {
@@ -103,63 +112,4 @@ function clickEquals(e) {
         resetState();
     }
 }
-
-/////////////////////
-
-
-// let boolDecimalExists = false;
-// let pendingOperand = null;
-// let pendingOperation = null;
-
-// function clickDigit(e) {
-//     if (display.innerText === "0") {
-//         display.innerText = "";    
-//     }
-//     display.innerText = `${display.innerText}${this.innerText}`;
-// }
-
-// function clickDecimal(e) {
-//     if (!boolDecimalExists) {
-//         display.innerText = `${display.innerText}${this.innerText}`;
-//     }
-//     boolDecimalExists = true;
-// }
-
-// function clickAllClear(e) {
-//     boolDecimalExists = false;
-//     display.innerText = "0";
-// }
-
-// function evaluateOperation(operator, a, b) {
-//     let result;
-//     switch (operator) {
-//         case '÷':
-//             result = a / b;
-//             break;
-//         case 'x':
-//             result = a * b;
-//             break;
-//         case '-':
-//             result = a - b;
-//             break;
-//         case '+':
-//             result = a + b;
-//             break;
-//     }
-//     return result;
-// }
-
-// function clickOperator(e) {
-//     if (pendingOperation !== null) {
-
-//     } else {
-//         pendingOperation = this.innerText;
-//         pendingOperand = display.innerText;
-//     }
-// }
-
-// digits.forEach(digit => digit.addEventListener('click', clickDigit));
-// decimal.addEventListener('click', clickDecimal);
-// allClear.addEventListener('click', clickAllClear);
-// operators.forEach(operator => operator.addEventListener('click', clickOperator));
 

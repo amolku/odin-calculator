@@ -6,12 +6,13 @@ const display = document.querySelector("#calculatorResult");
 const decimal = document.querySelector('#decimal');
 const clear = document.querySelector("#allClear");
 const equals = document.querySelector("#equals");
+const backspace = document.querySelector("#backspace");
+const plusminus = document.querySelector("#plusminus");
 
 // booleans and state properties
 let boolDecimalExists = false;
 let pendingBinaryOperation = null;
 let firstOperand = null;
-//let userClickedOperation = false;
 let userClickedDigit = false;
 
 // event listeners
@@ -20,7 +21,9 @@ digits.forEach(digit => digit.addEventListener('click', clickDigit));
 decimal.addEventListener('click', clickDecimal);
 operators.forEach(operator => operator.addEventListener('click', clickOperator));
 clear.addEventListener('click', clickAllClear);
-equals.addEventListener('click', clickEquals)
+equals.addEventListener('click', clickEquals);
+backspace.addEventListener('click', clickBackspace);
+plusminus.addEventListener('click', clickPlusMinus);
 
 // helper functions
 
@@ -112,4 +115,21 @@ function clickEquals(e) {
         resetState();
     }
 }
+
+function clickPlusMinus(e) {
+    userClickedDigit = true;
+    display.innerText = (-1)*Number(display.innerText);
+}
+
+function clickBackspace(e) {
+    //if (userClickedDigit) {
+    let cur = display.innerText;
+    if ((cur[0] === "-" && cur.length === 2) || (cur.length === 1)) {
+        display.innerText = 0;
+    } else {
+        display.innerText = display.innerText.slice(0, display.innerText.length - 1);
+    }
+    //}
+}
+
 
